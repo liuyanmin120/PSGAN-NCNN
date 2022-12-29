@@ -355,14 +355,17 @@ void softmax(float* src, float*dst)
     }
 }
 
-int main()
+int main(int argc, char** argv)
 {
+    if (argc < 3)
+        return -1;
+
     dlib::deserialize("assert/lms.dat") >> predictor;
     
 
-    cv::Mat source = cv::imread("assert/source.png");
+    cv::Mat source = cv::imread(argv[1]);
     cv::cvtColor(source, source, cv::COLOR_BGR2RGB);
-    cv::Mat reference = cv::imread("assert/reference.png");
+    cv::Mat reference = cv::imread(argv[2]);
     cv::cvtColor(reference, reference, cv::COLOR_BGR2RGB);
 
     cv::Mat real_A, real_B;
@@ -452,7 +455,7 @@ int main()
     postprocess(source_crop, fake_A);
 
     cv::cvtColor(fake_A, fake_A, cv::COLOR_RGB2BGR);
-    cv::imwrite("result.png", fake_A);
+    cv::imwrite(argv[3], fake_A);
     
 
     return 0;
